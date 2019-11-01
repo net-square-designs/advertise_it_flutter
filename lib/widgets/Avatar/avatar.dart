@@ -4,7 +4,7 @@ class Avatar extends StatelessWidget {
   final String avatarUrl;
   final double size;
 
-  Avatar({@required this.avatarUrl, @required this.size});
+  Avatar({@required this.avatarUrl, this.size});
 
   @override
   Widget build(BuildContext context) {

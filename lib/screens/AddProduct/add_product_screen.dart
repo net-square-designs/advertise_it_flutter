@@ -27,7 +27,7 @@ class AddProductScreen extends StatelessWidget {
           FlatButton(
             onPressed: (){},
             child: CustomText(
-              'Next',
+              '',
               color: appPink,
               styleName: StyleName.title,
             ),

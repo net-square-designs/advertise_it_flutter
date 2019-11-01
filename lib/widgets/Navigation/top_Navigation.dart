@@ -7,7 +7,7 @@ Widget topNavigation({
   PreferredSizeWidget bottom,
 }) {
   return AppBar(
-    title: Container(height: 35.0, child: Center(child: title)),
+    title: title,
     elevation: 1.0,
     leading: leading ?? null,
     actions: actions ?? null,
