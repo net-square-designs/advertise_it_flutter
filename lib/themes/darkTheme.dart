@@ -17,5 +17,5 @@ ThemeData darkTheme() => ThemeData(
           border: Border(bottom: BorderSide(color: appPink, width: 3)),
         ),
         labelColor: appPink,
-        unselectedLabelColor: appPink),
+        unselectedLabelColor: appWhite[200]),
     cardTheme: CardTheme(color: appBlack[400]));

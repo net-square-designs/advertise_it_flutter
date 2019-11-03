@@ -1,3 +1,4 @@
+import 'package:advertise_it/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class Avatar extends StatelessWidget {
@@ -10,7 +11,7 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       maxRadius: size ?? 30,
-      backgroundColor: Colors.grey,
+      backgroundColor: appPink,
       backgroundImage: NetworkImage(avatarUrl),
     );
   }

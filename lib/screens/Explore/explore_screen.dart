@@ -1,5 +1,6 @@
 import 'package:advertise_it/screens/Explore/explore_body.dart';
 import 'package:advertise_it/themes/colors.dart';
+import 'package:advertise_it/widgets/Buttons/CustomBackButton.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:advertise_it/widgets/Navigation/bottom_navigation.dart';
 import 'package:advertise_it/widgets/Navigation/top_Navigation.dart';
@@ -49,7 +50,7 @@ class ExploreScreen extends StatelessWidget {
               child: Icon(Icons.shopping_basket),
             )
           ],
-          leading: BackButton(),
+          leading: CustomBackButton(),
           bottom: bottomBar),
       body: ExploreBody(),
       bottomNavigationBar: bottomNavigation(context, screenName: routeName),

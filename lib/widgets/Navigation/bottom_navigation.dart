@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:advertise_it/themes/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +19,7 @@ Widget bottomNavigation(context, {screenName}) {
   }
 
   return Container(
-    height: 80.0,
+    height: Platform.isIOS ? 80.0 : 50,
     alignment: Alignment.center,
     child: BottomAppBar(
       child: Row(

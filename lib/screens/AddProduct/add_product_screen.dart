@@ -1,10 +1,10 @@
 import 'package:advertise_it/screens/AddProduct/add_product_body.dart';
 import 'package:advertise_it/themes/colors.dart';
+import 'package:advertise_it/widgets/Buttons/CustomBackButton.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:advertise_it/widgets/Navigation/bottom_navigation.dart';
 import 'package:advertise_it/widgets/Navigation/top_Navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddProductScreen extends StatelessWidget {
   static final routeName = '/add-product';
@@ -19,10 +19,7 @@ class AddProductScreen extends StatelessWidget {
             styleName: StyleName.title,
           ),
         ),
-        leading: IconButton(
-          icon: Icon(FontAwesomeIcons.angleLeft),
-          onPressed: () {},
-        ),
+        leading: CustomBackButton(),
         actions: <Widget>[
           FlatButton(
             onPressed: (){},

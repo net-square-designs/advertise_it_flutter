@@ -1,10 +1,10 @@
 import 'package:advertise_it/screens/Activity/activity_body.dart';
 import 'package:advertise_it/themes/colors.dart';
+import 'package:advertise_it/widgets/Buttons/CustomBackButton.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:advertise_it/widgets/Navigation/bottom_navigation.dart';
 import 'package:advertise_it/widgets/Navigation/top_Navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ActivityScreen extends StatefulWidget {
   static final routeName = '/activity';
@@ -32,11 +32,6 @@ class _ActivityScreenState extends State<ActivityScreen>
 
   @override
   Widget build(BuildContext context) {
-    _tabController.addListener(() {
-      setState(() {
-        activeIndex = _tabController.index;
-      });
-    });
     return Scaffold(
       appBar: topNavigation(
         title: Center(
@@ -45,10 +40,7 @@ class _ActivityScreenState extends State<ActivityScreen>
             styleName: StyleName.title,
           ),
         ),
-        leading: IconButton(
-          icon: Icon(FontAwesomeIcons.angleLeft),
-          onPressed: () {},
-        ),
+        leading: CustomBackButton(),
         actions: <Widget>[
           FlatButton(
             onPressed: () {},
@@ -64,31 +56,23 @@ class _ActivityScreenState extends State<ActivityScreen>
           isScrollable: true,
           tabs: <Widget>[
             Tab(
-              child: CustomText(
+              child: Text(
                 'Recent',
-                styleName: StyleName.subtitle,
-                color: activeIndex == 0 ? appPink : null,
               ),
             ),
             Tab(
-              child: CustomText(
-                'My Products',
-                styleName: StyleName.subtitle,
-                color: activeIndex == 1 ? appPink : null,
+              child: Text(
+                'Products',
               ),
             ),
             Tab(
-              child: CustomText(
+              child: Text(
                 'Promotions',
-                styleName: StyleName.subtitle,
-                color: activeIndex == 2 ? appPink : null,
               ),
             ),
             Tab(
-              child: CustomText(
+              child: Text(
                 'People',
-                styleName: StyleName.subtitle,
-                color: activeIndex == 3 ? appPink : null,
               ),
             )
           ],

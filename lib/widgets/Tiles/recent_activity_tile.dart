@@ -4,6 +4,10 @@ import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class RecentActivityTile extends StatelessWidget {
+  final bool isViewed;
+
+  RecentActivityTile({@required this.isViewed});
+
   @override
   Widget build(BuildContext context) {
     return Card(
