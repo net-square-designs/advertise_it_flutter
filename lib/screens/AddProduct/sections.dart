@@ -3,7 +3,7 @@ import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:advertise_it/widgets/CustomTextField/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
-Widget section1() {
+Widget section1(Function nextPage) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -18,12 +18,17 @@ Widget section1() {
       CustomTextField(
         hintText: 'Choose A Nice Title',
       ),
-      RaisedButton(child: CustomText('Next'), onPressed: () {}),
+      RaisedButton(
+        child: CustomText('Next'),
+        onPressed: () {
+          return nextPage();
+        },
+      ),
     ],
   );
 }
 
-Widget section2() {
+Widget section2(Function nextPage) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,7 +51,9 @@ Widget section2() {
               icon: Icon(Icons.cloud_upload),
               color: appPink,
               iconSize: 100,
-              onPressed: () {},
+              onPressed: () {
+                // return nextPage();
+              },
             ),
             CustomText(
               'Tap to choose an image',
@@ -75,12 +82,17 @@ Widget section2() {
           ],
         ),
       ),
-      RaisedButton(child: CustomText('Next'), onPressed: () {}),
+      RaisedButton(
+        child: CustomText('Next'),
+        onPressed: () {
+          return nextPage();
+        },
+      ),
     ],
   );
 }
 
-Widget section3() {
+Widget section3(Function nextPage) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,12 +122,17 @@ Widget section3() {
             helperText: "Maximum of 200 words"),
         style: TextStyle(fontSize: 18, color: appWhite[100]),
       ),
-      RaisedButton(child: CustomText('Next'), onPressed: () {}),
+      RaisedButton(
+        child: CustomText('Next'),
+        onPressed: () {
+          return nextPage();
+        },
+      ),
     ],
   );
 }
 
-Widget section4() {
+Widget section4(Function nextPage) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -149,7 +166,12 @@ Widget section4() {
             helperText: "Currency must be in Naira"),
         style: TextStyle(fontSize: 18, color: appWhite[100]),
       ),
-      RaisedButton(child: CustomText('Next'), onPressed: () {}),
+      RaisedButton(
+        child: CustomText('Next'),
+        onPressed: () {
+          return nextPage();
+        },
+      ),
     ],
   );
 }

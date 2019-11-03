@@ -47,8 +47,8 @@ Widget bottomNavigation(context, {screenName}) {
           ),
           IconButton(
             icon: getIcon(Icons.person),
-            onPressed: () => navigateToScreen('profile'),
-            color: useScreenName('profile'),
+            onPressed: () => navigateToScreen('/profile'),
+            color: useScreenName('/profile'),
           ),
         ],
       ),
