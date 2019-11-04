@@ -23,6 +23,30 @@ List mockProducts = [
       'name': 'Kennu Reeves',
     }
   },
+  {
+    'mediaUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQp1hwE9MaPkSaSOJaFTchBjiADXhTqCClztOwwOfsV0B3ruli2',
+    'views': '3300',
+    'likes': '1400',
+    'price': '125000',
+    'title': 'Random Product Name',
+    'productOwner': {
+      'avatarUrl':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT0XHNNdcvSZvfTYkC9_O8AdsqeNAFgIMFwvZdb92dPOZkJofBP',
+      'name': 'Kennu Reeves',
+    }
+  },
+  {
+    'mediaUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQp1hwE9MaPkSaSOJaFTchBjiADXhTqCClztOwwOfsV0B3ruli2',
+    'views': '3300',
+    'likes': '1400',
+    'price': '125000',
+    'title': 'Random Product Name',
+    'productOwner': {
+      'avatarUrl':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT0XHNNdcvSZvfTYkC9_O8AdsqeNAFgIMFwvZdb92dPOZkJofBP',
+      'name': 'Kennu Reeves',
+    }
+  },
 ];
 
 List getProducts() {

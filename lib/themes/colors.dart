@@ -13,3 +13,4 @@ const appWhite = {
 
 const appPink = Color(0XFFF74F78);
 const appBlue = Color(0XFF2D72FF);
+const appPurple = Color(0XFF8A4EA2);
