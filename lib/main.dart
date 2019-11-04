@@ -3,6 +3,7 @@ import 'package:advertise_it/providers/auth_provider.dart';
 import 'package:advertise_it/providers/products_provider.dart';
 import 'package:advertise_it/screens/Activity/activity_screen.dart';
 import 'package:advertise_it/screens/AddProduct/add_product_screen.dart';
+import 'package:advertise_it/screens/Auth/login_screen.dart';
 import 'package:advertise_it/screens/Explore/explore_screen.dart';
 import 'package:advertise_it/screens/Home/home_screen.dart';
 import 'package:advertise_it/screens/Profile/profile_screen.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           ActivityScreen.routeName: (context) => ActivityScreen(),
           ProfileScreen.routeName: (context) => ProfileScreen(),
           SettingsScreen.routeName: (context) => SettingsScreen(),
+          LoginScreen.routeName: (context) => LoginScreen(),
         },
       ),
     );

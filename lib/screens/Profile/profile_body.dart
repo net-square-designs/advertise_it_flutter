@@ -1,3 +1,4 @@
+import 'package:advertise_it/models/user.interface.dart';
 import 'package:advertise_it/themes/colors.dart';
 import 'package:advertise_it/widgets/Avatar/avatar.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
@@ -5,8 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileBody extends StatelessWidget {
+  final IUser user;
+  final defalutAvatar = 'https://cdn2.iconfinder.com/data/icons/avatar-profile/449/avatar_user_default_contact_profile_male-512.png';
+
+  ProfileBody({@required this.user});
   @override
   Widget build(BuildContext context) {
+    // print(user.profile.image);
+
     return Container(
       color: appBlack[400],
       child: Center(
@@ -14,12 +21,15 @@ class ProfileBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Avatar(
-              avatarUrl:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSqkmkOfq_KfCyDpy9HwbKDYaEz1jz9kiGw2wNOMOyocp27ZCNA',
+              avatarUrl: user.profile.image ?? defalutAvatar,
               size: 50,
             ),
-            CustomText('Chris Hemsworth', styleName: StyleName.subtitle),
-            CustomText('Lekki, Lagos', styleName: StyleName.caption),
+            CustomText(
+              '${user.profile.firstName} ${user.profile.lastName}',
+              styleName: StyleName.subtitle,
+            ),
+            CustomText(user.profile.stateOfResidence,
+                styleName: StyleName.caption),
             SizedBox(height: 20),
             SizedBox(
               width: 250,

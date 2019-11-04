@@ -1,16 +1,22 @@
+import 'package:advertise_it/providers/auth_provider.dart';
 import 'package:advertise_it/themes/colors.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class LoginBody extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final Color textFieldColor = Color.fromRGBO(0, 0, 0, 0.2);
 
-  submitLogin() {
-    print(_emailController.text);
-    print(_passwordController.text);
+  void submitLogin(context) {
+    final AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    authProvider.loginUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -53,6 +59,7 @@ class LoginBody extends StatelessWidget {
             ),
             SizedBox(height: 20),
             TextFormField(
+              obscureText: true,
               autofocus: true,
               controller: _passwordController,
               keyboardType: TextInputType.emailAddress,
@@ -78,7 +85,7 @@ class LoginBody extends StatelessWidget {
                   child: RaisedButton(
                     padding: EdgeInsets.all(15),
                     child: CustomText('Login', styleName: StyleName.title),
-                    onPressed: () => submitLogin(),
+                    onPressed: () => submitLogin(context),
                     color: Color.fromRGBO(138, 78, 162, 0.5),
                   ),
                 ),
@@ -116,13 +123,15 @@ class LoginBody extends StatelessWidget {
                   child: RaisedButton(
                     padding: EdgeInsets.all(12),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(FontAwesomeIcons.facebook, color: appBlue,),
-                        CustomText('Login with facebook', styleName: StyleName.subtitle, color: appBlue)
+                        Icon(FontAwesomeIcons.facebook, color: appBlue),
+                        SizedBox(width: 10),
+                        CustomText('Login with facebook',
+                            styleName: StyleName.subtitle, color: appBlue)
                       ],
                     ),
-                    onPressed: () => submitLogin(),
+                    onPressed: () => submitLogin(context),
                     color: Color.fromRGBO(247, 241, 240, 0.85),
                   ),
                 ),
