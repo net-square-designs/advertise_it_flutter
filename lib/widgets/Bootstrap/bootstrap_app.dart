@@ -8,10 +8,13 @@ import 'package:provider/provider.dart';
 
 class BootstrapApp extends StatelessWidget {
   Widget checkDependencies(AppBootstrapProvider appProvider, AuthProvider authProvider) {
-    // print(appProvider.hasSeenIntro);
     if (appProvider.isLoading) {
       return SplashScreen();
     }
+    // Todo =>
+    /// check if user has seen intro (appProvider.hasSeenIntro)
+    /// use status to display intro screen
+    /// remember to setIntro status
     if (authProvider.authToken != null) {
       return HomeScreen();
     }
