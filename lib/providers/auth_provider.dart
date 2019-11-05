@@ -1,23 +1,28 @@
+import 'package:advertise_it/constants/api.dart';
 import 'package:advertise_it/models/user.interface.dart';
 import 'package:advertise_it/utils/jwt_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AuthProvider extends ChangeNotifier {
   String _authToken;
   IUser _authUser;
 
   AuthProvider() {
-    // Todo
-    /// 1. check for existing auth token
-    /// 2. set the existing auth token
+    initTokens();
   }
 
   String get authToken => _authToken;
   IUser get user => _authUser;
 
-  void setAuthToken(token) {
+  void setAuthToken(token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('authToken', token);
+
     _authToken = token;
     notifyListeners();
   }
@@ -25,12 +30,21 @@ class AuthProvider extends ChangeNotifier {
   void setAuthUser(String token) {
     final userData = IUser.fromMap(parseJwt(token));
 
-    print(parseJwt(token));
+    // print(parseJwt(token));
 
     setAuthToken(token);
     _authUser = userData;
 
     notifyListeners();
+  }
+
+  void initTokens() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _token = prefs.getString('authToken');
+
+    if (_token != null) {
+      setAuthUser(_token);
+    }
   }
 
   Future<dynamic> loginUser({
@@ -40,7 +54,7 @@ class AuthProvider extends ChangeNotifier {
     http.Response response;
     try {
       response = await http.post(
-        'http://localhost:4225/api/v1/auth/login',
+        Api.loginUrl,
         body: {'email': email, 'password': password},
       );
 

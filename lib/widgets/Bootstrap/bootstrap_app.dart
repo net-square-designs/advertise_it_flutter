@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BootstrapApp extends StatelessWidget {
-  Widget checkDependencies(isLoading, authToken) {
-    if (isLoading) {
+  Widget checkDependencies(AppBootstrapProvider appProvider, AuthProvider authProvider) {
+    // print(appProvider.hasSeenIntro);
+    if (appProvider.isLoading) {
       return SplashScreen();
     }
-    if (authToken != null) {
+    if (authProvider.authToken != null) {
       return HomeScreen();
     }
     return LoginScreen();
@@ -23,6 +24,6 @@ class BootstrapApp extends StatelessWidget {
         Provider.of<AppBootstrapProvider>(context);
     final AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
-    return checkDependencies(appProvider.isLoading, authProvider.authToken);
+    return checkDependencies(appProvider, authProvider);
   }
 }
