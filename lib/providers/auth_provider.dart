@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:advertise_it/constants/api.dart';
 import 'package:advertise_it/models/user.interface.dart';
+import 'package:advertise_it/screens/Home/home_screen.dart';
 import 'package:advertise_it/utils/jwt_helper.dart';
 import 'package:advertise_it/widgets/Toaster/toaster.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class AuthProvider extends ChangeNotifier {
       if (jsonResponse['statusCode'] == 200) {
         successToaster(context, 'You have logged in successfully');
 
-        Timer(
+        return Timer(
           Duration(seconds: 2),
           () => setAuthUser(jsonResponse['data']['token']),
         );
@@ -94,6 +95,7 @@ class AuthProvider extends ChangeNotifier {
     @required String firstName,
     @required String email,
     @required String password,
+    @required String phone,
     context,
   }) async {
     http.Response response;
@@ -104,19 +106,21 @@ class AuthProvider extends ChangeNotifier {
           'email': email,
           'password': password,
           'firstName': firstName,
+          'phone': phone,
           'accountType': 'Customer',
         },
       );
 
       var jsonResponse = convert.jsonDecode(response.body);
 
-      if (jsonResponse['statusCode'] == 200) {
+      if (jsonResponse['statusCode'] >= 200 &&
+          jsonResponse['statusCode'] <= 210) {
         successToaster(context, 'Your account was created successfully');
 
-        Timer(
-          Duration(seconds: 2),
-          () => setAuthUser(jsonResponse['data']['token']),
-        );
+        return Timer(Duration(seconds: 2), () {
+          setAuthUser(jsonResponse['data']['token']);
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        });
       }
 
       if (jsonResponse['statusCode'] == 400) {
@@ -125,6 +129,8 @@ class AuthProvider extends ChangeNotifier {
                 ['firstName'] ??
             jsonResponse['errors']['detailsObject']['email'] ??
             jsonResponse['errors']['detailsObject']['password'];
+
+        print('error: $errorMsg');
 
         return errorToaster(context, errorMsg);
       }

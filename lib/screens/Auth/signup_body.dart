@@ -15,6 +15,7 @@ class _SignupBodyState extends State<SignupBody> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   final Color textFieldColor = Color.fromRGBO(0, 0, 0, 0.2);
 
@@ -28,6 +29,7 @@ class _SignupBodyState extends State<SignupBody> {
         email: _emailController.text,
         password: _passwordController.text,
         firstName: _firstNameController.text,
+        phone: _phoneController.text,
         context: context,
       );
     }
@@ -43,6 +45,16 @@ class _SignupBodyState extends State<SignupBody> {
   validateFirstName(String value) {
     if (value.isEmpty) {
       return 'Please enter your email';
+    }
+    return null;
+  }
+
+  validatePhone(String value) {
+    if (value.isEmpty) {
+      return 'Please enter your phone';
+    }
+    if (value.length != 11) {
+      return 'phone number should be at least 11 digits';
     }
     return null;
   }
@@ -89,7 +101,28 @@ class _SignupBodyState extends State<SignupBody> {
                   labelStyle: TextStyle(color: appWhite[100]),
                   hintStyle: TextStyle(color: appWhite[100]),
                   errorStyle: TextStyle(color: appWhite[100]),
-                  hintText: 'Enter your First name',
+                  hintText: 'Enter your First Name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  fillColor: textFieldColor,
+                  filled: true,
+                ),
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                validator: (value) => validatePhone(value),
+                autofocus: true,
+                controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.next,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  labelStyle: TextStyle(color: appWhite[100]),
+                  hintStyle: TextStyle(color: appWhite[100]),
+                  errorStyle: TextStyle(color: appWhite[100]),
+                  hintText: 'Enter your Phone Number',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none,
