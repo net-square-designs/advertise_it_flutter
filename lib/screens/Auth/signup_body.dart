@@ -1,39 +1,46 @@
 import 'package:advertise_it/providers/auth_provider.dart';
-import 'package:advertise_it/screens/Auth/signup_screen.dart';
+import 'package:advertise_it/screens/Auth/login_screen.dart';
 import 'package:advertise_it/themes/colors.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class LoginBody extends StatefulWidget {
+class SignupBody extends StatefulWidget {
   @override
-  _LoginBodyState createState() => _LoginBodyState();
+  _SignupBodyState createState() => _SignupBodyState();
 }
 
-class _LoginBodyState extends State<LoginBody> {
+class _SignupBodyState extends State<SignupBody> {
+  final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
 
   final Color textFieldColor = Color.fromRGBO(0, 0, 0, 0.2);
 
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>(debugLabel: 'signupForm');
 
-  submitLogin(context) {
+  handleSignup(context) {
     final AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     if (_formKey.currentState.validate()) {
-      return authProvider.loginUser(
+      return authProvider.signupUser(
         email: _emailController.text,
         password: _passwordController.text,
-        context: context
+        firstName: _firstNameController.text,
+        context: context,
       );
     }
-    // return errorToaster(context, 'Please fill out all the necessary fields and try again!');
   }
 
   validateEmail(String value) {
+    if (value.isEmpty) {
+      return 'Please enter your email';
+    }
+    return null;
+  }
+
+  validateFirstName(String value) {
     if (value.isEmpty) {
       return 'Please enter your email';
     }
@@ -72,8 +79,28 @@ class _LoginBodyState extends State<LoginBody> {
               CustomText('AdvertiseIt.', styleName: StyleName.headline),
               SizedBox(height: 50),
               TextFormField(
-                validator: (value) => validateEmail(value),
+                validator: (value) => validateFirstName(value),
                 autofocus: true,
+                controller: _firstNameController,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  labelStyle: TextStyle(color: appWhite[100]),
+                  hintStyle: TextStyle(color: appWhite[100]),
+                  errorStyle: TextStyle(color: appWhite[100]),
+                  hintText: 'Enter your First name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  fillColor: textFieldColor,
+                  filled: true,
+                ),
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                validator: (value) => validateEmail(value),
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -82,7 +109,7 @@ class _LoginBodyState extends State<LoginBody> {
                   labelStyle: TextStyle(color: appWhite[100]),
                   hintStyle: TextStyle(color: appWhite[100]),
                   errorStyle: TextStyle(color: appWhite[100]),
-                  hintText: 'Enter your Email or Username',
+                  hintText: 'Enter your Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none,
@@ -90,15 +117,13 @@ class _LoginBodyState extends State<LoginBody> {
                   fillColor: textFieldColor,
                   filled: true,
                 ),
-                // style: TextStyle(color: appPink),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               TextFormField(
                 validator: (value) => validatePassword(value),
                 obscureText: true,
-                autofocus: true,
                 controller: _passwordController,
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.next,
                 autocorrect: false,
                 decoration: InputDecoration(
@@ -113,16 +138,15 @@ class _LoginBodyState extends State<LoginBody> {
                   fillColor: textFieldColor,
                   filled: true,
                 ),
-                // style: TextStyle(color: appPink),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Row(
                 children: <Widget>[
                   Expanded(
                     child: RaisedButton(
                       padding: EdgeInsets.all(15),
-                      child: CustomText('Login', styleName: StyleName.title),
-                      onPressed: () => submitLogin(context),
+                      child: CustomText('Signup', styleName: StyleName.title),
+                      onPressed: () => handleSignup(context),
                       color: Color.fromRGBO(138, 78, 162, 0.5),
                     ),
                   ),
@@ -132,24 +156,14 @@ class _LoginBodyState extends State<LoginBody> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CustomText('Forgot Password?'),
+                  CustomText('Have an account?'),
                   SizedBox(width: 5),
                   InkWell(
-                    child: CustomText('Get Help Siginin In',
-                        styleName: StyleName.subtitle),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CustomText('New to AdvertiseIt?'),
-                  SizedBox(width: 5),
-                  InkWell(
-                    child: CustomText('Sign Up', styleName: StyleName.subtitle),
-                    onTap: () => Navigator.pushReplacementNamed(context, SignupScreen.routeName),
+                    child: CustomText('Sign in', styleName: StyleName.subtitle),
+                    onTap: () => Navigator.pushReplacementNamed(
+                      context,
+                      LoginScreen.routeName,
+                    ),
                   ),
                 ],
               ),
@@ -168,7 +182,7 @@ class _LoginBodyState extends State<LoginBody> {
                               styleName: StyleName.subtitle, color: appBlue)
                         ],
                       ),
-                      onPressed: () => submitLogin(context),
+                      onPressed: () => {},
                       color: Color.fromRGBO(247, 241, 240, 0.85),
                     ),
                   ),

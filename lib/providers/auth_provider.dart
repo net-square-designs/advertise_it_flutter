@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:advertise_it/constants/api.dart';
 import 'package:advertise_it/models/user.interface.dart';
 import 'package:advertise_it/utils/jwt_helper.dart';
+import 'package:advertise_it/widgets/Toaster/toaster.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -30,8 +33,6 @@ class AuthProvider extends ChangeNotifier {
   void setAuthUser(String token) {
     final userData = IUser.fromMap(parseJwt(token));
 
-    // print(parseJwt(token));
-
     setAuthToken(token);
     _authUser = userData;
 
@@ -50,6 +51,7 @@ class AuthProvider extends ChangeNotifier {
   Future<dynamic> loginUser({
     @required String email,
     @required String password,
+    context,
   }) async {
     http.Response response;
     try {
@@ -61,13 +63,80 @@ class AuthProvider extends ChangeNotifier {
       var jsonResponse = convert.jsonDecode(response.body);
 
       if (jsonResponse['statusCode'] == 200) {
-        return setAuthUser(jsonResponse['data']['token']);
+        successToaster(context, 'You have logged in successfully');
+
+        Timer(
+          Duration(seconds: 2),
+          () => setAuthUser(jsonResponse['data']['token']),
+        );
       }
 
-      return jsonResponse['message'];
+      if (jsonResponse['statusCode'] == 400) {
+        final String errorMsg = jsonResponse['errors']['detailsObject']
+                ['email'] ??
+            jsonResponse['errors']['detailsObject']['password'];
+
+        return errorToaster(context, errorMsg);
+      }
+
+      return errorToaster(context, jsonResponse['message']);
     } catch (e, stack) {
       print(e);
       print(stack);
+      return errorToaster(
+        context,
+        'An error occured while process your request. Please try again in a moment',
+      );
+    } finally {}
+  }
+
+  Future<dynamic> signupUser({
+    @required String firstName,
+    @required String email,
+    @required String password,
+    context,
+  }) async {
+    http.Response response;
+    try {
+      response = await http.post(
+        Api.signupUrl,
+        body: {
+          'email': email,
+          'password': password,
+          'firstName': firstName,
+          'accountType': 'Customer',
+        },
+      );
+
+      var jsonResponse = convert.jsonDecode(response.body);
+
+      if (jsonResponse['statusCode'] == 200) {
+        successToaster(context, 'Your account was created successfully');
+
+        Timer(
+          Duration(seconds: 2),
+          () => setAuthUser(jsonResponse['data']['token']),
+        );
+      }
+
+      if (jsonResponse['statusCode'] == 400) {
+        print(jsonResponse['errors']);
+        final String errorMsg = jsonResponse['errors']['detailsObject']
+                ['firstName'] ??
+            jsonResponse['errors']['detailsObject']['email'] ??
+            jsonResponse['errors']['detailsObject']['password'];
+
+        return errorToaster(context, errorMsg);
+      }
+
+      return errorToaster(context, jsonResponse['message']);
+    } catch (e, stack) {
+      print(e);
+      print(stack);
+      return errorToaster(
+        context,
+        'An error occured while process your request. Please try again in a moment',
+      );
     } finally {}
   }
 }
