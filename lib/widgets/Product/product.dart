@@ -1,5 +1,8 @@
+import 'package:advertise_it/utils/stringHelpers.dart';
 import 'package:advertise_it/widgets/Avatar/avatar.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
+import 'package:advertise_it/widgets/Loaders/loaders.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -23,9 +26,14 @@ class Product extends StatelessWidget {
   });
 
   Widget postMedia({@required mediaUrl, mediaType = 'image'}) {
+    Widget image = CachedNetworkImage(
+      imageUrl: mediaUrl,
+      placeholder: (context, url) => circleLoader(),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    );
     return Flexible(
       child: ClipRRect(
-        child: Image.network(mediaUrl),
+        child: image,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20.0),
           topRight: Radius.circular(20.0),
@@ -44,18 +52,20 @@ class Product extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CustomText(
-                title,
-                styleName: StyleName.title,
-              ),
-              CustomText(
-                'by $ownerName',
-                styleName: StyleName.caption,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CustomText(
+                  truncateWithEllipsis(text: title),
+                  styleName: StyleName.title,
+                ),
+                CustomText(
+                  'by $ownerName',
+                  styleName: StyleName.caption,
+                ),
+              ],
+            ),
           ),
           Avatar(
             avatarUrl: avatarUrl,
@@ -69,7 +79,7 @@ class Product extends StatelessWidget {
   Widget postActions({
     @required int views,
     @required int likes,
-    @required int price,
+    @required double price,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -112,7 +122,10 @@ class Product extends StatelessWidget {
             ownerAvatar: avatarUrl,
             ownerName: ownerName,
           ),
-          postActions(views: int.parse(views), likes: int.parse(likes), price: 200)
+          postActions(
+              views: int.parse(views),
+              likes: int.parse(likes),
+              price: double.parse(price))
         ],
       ),
     );

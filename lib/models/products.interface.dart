@@ -18,11 +18,11 @@ class IProducts {
   factory IProducts.fromMap(Map data) {
     return IProducts(
       title: data['title'] ?? '',
-      mediaUrl: data["mediaUrl"] ?? '',
-      views: data['views'] ?? '',
-      likes: data['likes'] ?? '',
-      price: data['price'] ?? '',
-      productOwner: data['productOwner'] ?? '',
+      mediaUrl: data["mediaUrl"] ?? data["ProductImages"][0]['image'] ?? '',
+      views: data['views'] ?? '0',
+      likes: data['likes'] ?? '0',
+      price: data['price'] ?? '0',
+      productOwner: data['productOwner'] ?? data['Owner'] ?? '',
     );
   }
 }
