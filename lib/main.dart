@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:advertise_it/providers/app_bootstrap_provider.dart';
 import 'package:advertise_it/providers/auth_provider.dart';
 import 'package:advertise_it/providers/products_provider.dart';
@@ -14,7 +16,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'widgets/Bootstrap/bootstrap_app.dart';
 
-void main() => runApp(MyApp());
+void main() => runZoned(() {
+      runApp(MyApp());
+    }, onError: (error, stackTrace) {
+      print('Global error handler!!');
+      print(error);
+    });
 
 class MyApp extends StatelessWidget {
   @override

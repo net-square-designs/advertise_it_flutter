@@ -1,8 +1,7 @@
 import 'package:advertise_it/utils/stringHelpers.dart';
 import 'package:advertise_it/widgets/Avatar/avatar.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
-import 'package:advertise_it/widgets/Loaders/loaders.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:advertise_it/widgets/LoadImage/loadImage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -26,14 +25,16 @@ class Product extends StatelessWidget {
   });
 
   Widget postMedia({@required mediaUrl, mediaType = 'image'}) {
-    Widget image = CachedNetworkImage(
-      imageUrl: mediaUrl,
-      placeholder: (context, url) => circleLoader(),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-    );
+
+    Widget cacheImage = CustomImage(imageUrl: mediaUrl);
+
     return Flexible(
       child: ClipRRect(
-        child: image,
+        child: Row(
+          children: <Widget>[
+            Expanded(child: cacheImage),
+          ],
+        ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20.0),
           topRight: Radius.circular(20.0),

@@ -40,6 +40,7 @@ class _HomeBodyState extends State<HomeBody> {
           );
         }
       }
+      return null;
     });
 
     Widget renderBody() {
@@ -53,9 +54,18 @@ class _HomeBodyState extends State<HomeBody> {
       }
       return ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: products.length,
+        itemCount: products.length + 1,
         controller: _scrollController,
         itemBuilder: (context, index) {
+          if (index == products.length) {
+            if (index >= productsProvider.paginationData.count) {
+              return Container();
+            }
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(child: circleLoader()),
+            );
+          }
           return Padding(
             padding: const EdgeInsets.all(10.0),
             child: Product(

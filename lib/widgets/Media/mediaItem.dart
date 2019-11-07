@@ -1,13 +1,8 @@
-import 'package:advertise_it/widgets/Loaders/loaders.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:advertise_it/widgets/LoadImage/loadImage.dart';
 import 'package:flutter/material.dart';
 
 Widget mediaItem({@required mediaUrl, mediaType = 'image'}) {
-  Widget image = CachedNetworkImage(
-    imageUrl: mediaUrl,
-    placeholder: (context, url) => circleLoader(),
-    errorWidget: (context, url, error) => Icon(Icons.error),
-  );
+  Widget image = CustomImage(imageUrl: mediaUrl);
 
   return ClipRRect(
     child: image,

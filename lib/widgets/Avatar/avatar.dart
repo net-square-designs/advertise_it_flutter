@@ -1,4 +1,5 @@
 import 'package:advertise_it/themes/colors.dart';
+import 'package:advertise_it/widgets/LoadImage/loadImage.dart';
 import 'package:flutter/material.dart';
 
 class Avatar extends StatelessWidget {
@@ -12,7 +13,12 @@ class Avatar extends StatelessWidget {
     return CircleAvatar(
       maxRadius: size ?? 30,
       backgroundColor: appPink,
-      backgroundImage: NetworkImage(avatarUrl),
+      child: ClipRRect(
+        child: CustomImage(imageUrl: avatarUrl),
+        borderRadius: BorderRadius.all(
+          Radius.circular(20.0),
+        ),
+      ),
     );
   }
 }
