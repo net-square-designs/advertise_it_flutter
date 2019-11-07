@@ -81,22 +81,18 @@ class ProductsProvider extends ChangeNotifier {
     String direction = orderDirection == OrderDirection.ASC ? 'ASC' : 'DESC';
     String url = '${Api.productsUrl}?page=$page&pageSize=$pageSize'
         '&orderBy=$orderBy&direction=$direction';
-    // print('0 secs');
-    startFetching();
-    setNextPage();
+
     try {
-      // print('1 secs');
+      startFetching();
+
       http.Response response = await http.get(url);
-      // print('2 secs');
       Map jsonResponse = convert.jsonDecode(response.body);
-      // Timer(Duration(seconds: 2), () => print('2 secs'));
 
       if (jsonResponse['success']) {
         List fetchedProducts = jsonResponse['data']['products'];
         Map metaData = jsonResponse['data']['metaData'];
 
-        // print(response.body);
-        print(metaData);
+        setNextPage();
         setMetaData(metaData);
 
         List<IProducts> productsList = fetchedProducts.map((product) {
@@ -107,13 +103,11 @@ class ProductsProvider extends ChangeNotifier {
         if (_products.length == 0) {
           return setProducts(productsList);
         }
-        addProducts(productsList);
-
-        // return stopFetching();
+        return addProducts(productsList);
       }
 
-      setErrors(jsonResponse['message']);
-      return stopFetching();
+      stopFetching();
+      return setErrors(jsonResponse['message']);
     } catch (e, stack) {
       print(e);
       print(stack);
