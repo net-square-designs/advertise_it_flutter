@@ -66,10 +66,10 @@ class AuthProvider extends ChangeNotifier {
       if (jsonResponse['statusCode'] == 200) {
         successToaster(context, 'You have logged in successfully');
 
-        return Timer(
-          Duration(seconds: 2),
-          () => setAuthUser(jsonResponse['data']['token']),
-        );
+        return Timer(Duration(seconds: 2), () {
+          setAuthUser(jsonResponse['data']['token']);
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        });
       }
 
       if (jsonResponse['statusCode'] == 400) {
