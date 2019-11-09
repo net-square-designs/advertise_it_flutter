@@ -1,17 +1,19 @@
 class ICategories {
-  final String title;
-  final String mediaUrl;
+  final int id;
+  final String name;
+  final String imageUrl;
 
   ICategories({
-    this.title,
-    this.mediaUrl,
+    this.id,
+    this.name,
+    this.imageUrl
   });
 
   factory ICategories.fromMap(Map data) {
     return ICategories(
-      title: data['title'] ?? '',
-      mediaUrl: data["mediaUrl"] ?? '',
+      id: data['id'] ?? 1,
+      name: data["name"] ?? '',
+      imageUrl: data["image"] ?? '',
     );
   }
 }
-

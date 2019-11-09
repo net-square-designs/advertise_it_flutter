@@ -1,20 +1,27 @@
+import 'package:advertise_it/models/products.interface.dart';
+import 'package:advertise_it/providers/products_provider.dart';
+import 'package:advertise_it/screens/ViewProducts/single_product.dart';
 import 'package:advertise_it/utils/stringHelpers.dart';
 import 'package:advertise_it/widgets/Avatar/avatar.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:advertise_it/widgets/LoadImage/loadImage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class Product extends StatelessWidget {
+  final int id;
   final String mediaUrl;
-  final String views;
-  final String likes;
+  final int views;
+  final int likes;
   final String price;
   final String title;
   final String ownerName;
   final String avatarUrl;
+  final List productImages;
 
   Product({
+    this.id,
     this.mediaUrl,
     this.views,
     this.likes,
@@ -22,11 +29,14 @@ class Product extends StatelessWidget {
     this.ownerName,
     this.avatarUrl,
     this.title,
+    this.productImages,
   });
 
   Widget postMedia({@required mediaUrl, mediaType = 'image'}) {
-
-    Widget cacheImage = CustomImage(imageUrl: mediaUrl);
+    Widget cacheImage = CustomImage(
+      imageUrl: mediaUrl,
+      height: 240,
+    );
 
     return Flexible(
       child: ClipRRect(
@@ -111,6 +121,9 @@ class Product extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ProductsProvider productsProvider =
+        Provider.of<ProductsProvider>(context);
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Column(
@@ -118,15 +131,26 @@ class Product extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           postMedia(mediaUrl: mediaUrl),
-          postTitle(
-            title: title,
-            ownerAvatar: avatarUrl,
-            ownerName: ownerName,
+          InkWell(
+            child: postTitle(
+              title: title,
+              ownerAvatar: avatarUrl,
+              ownerName: ownerName,
+            ),
+            onTap: () async {
+              final result = await Navigator.pushNamed(
+                context,
+                ViewSingleProduct.routeName,
+                arguments: ViewSingleProductArguments(id: id),
+              );
+
+              if (result is IProducts) {
+                productsProvider.updateProductList(result);
+              }
+            },
           ),
           postActions(
-              views: int.parse(views),
-              likes: int.parse(likes),
-              price: double.parse(price))
+              views: (views), likes: (likes), price: double.parse(price))
         ],
       ),
     );

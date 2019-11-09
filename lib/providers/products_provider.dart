@@ -28,7 +28,7 @@ class ProductsProvider extends ChangeNotifier {
   List<IProducts> get products => _products;
 
   ProductsProvider() {
-    fetchProducts(page: 1, pageSize: 10);
+    // fetchProducts(page: 1, pageSize: 10);
   }
 
   void setNextPage() {
@@ -42,14 +42,30 @@ class ProductsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateProductList(IProducts product) {
+    // print('updateProductList');
+    final updatedProductsList = _products.map(
+      (thisProduct) {
+        if (thisProduct.id == product.id) {
+          // print('product: ${product.id}: ${product.views}');
+          return thisProduct = product;
+        }
+        return thisProduct;
+      },
+    ).toList();
+
+    Future.delayed(Duration.zero, () {
+      _products = updatedProductsList;
+      notifyListeners();
+    });
+  }
+
   void startFetching() {
-    // print('called start fetching');
     _isFetching = true;
     notifyListeners();
   }
 
   void stopFetching() {
-    // print('called stop fetching');
     _isFetching = false;
     notifyListeners();
   }
@@ -91,6 +107,10 @@ class ProductsProvider extends ChangeNotifier {
       if (jsonResponse['success']) {
         List fetchedProducts = jsonResponse['data']['products'];
         Map metaData = jsonResponse['data']['metaData'];
+
+        // print('fetchedProducts: ${fetchedProducts[0]['ProductImages']}');
+
+        // return;
 
         setNextPage();
         setMetaData(metaData);
