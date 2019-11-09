@@ -6,11 +6,12 @@ import 'package:flutter/services.dart';
 
 class CustomImage extends StatelessWidget {
   final String imageUrl;
-  final double containerHeight = 200;
-  CustomImage({@required this.imageUrl});
+  final double height;
+  CustomImage({@required this.imageUrl, this.height});
 
   @override
   Widget build(BuildContext context) {
+  final double containerHeight = 200;
     try {
       Widget image = CachedNetworkImage(
         fit: BoxFit.cover,
@@ -31,7 +32,7 @@ class CustomImage extends StatelessWidget {
         ),
       );
 
-      return Container(child: image, height: 300,);
+      return Container(child: image, height: height ?? null,);
     } on PlatformException {
       print('Image failed to load');
       return Container();

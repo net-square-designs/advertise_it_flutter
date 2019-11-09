@@ -20,11 +20,22 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      final ProductsProvider productsProvider =
+          Provider.of<ProductsProvider>(context);
+      // print(productsProvider.paginationData);
+
+      productsProvider.fetchProducts(page: 1, pageSize: 10);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ProductsProvider productsProvider =
         Provider.of<ProductsProvider>(context);
     final products = productsProvider.products;
-    final paginationData = productsProvider.paginationData;
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -36,7 +47,7 @@ class _HomeBodyState extends State<HomeBody> {
             productsProvider.paginationData.totalPages) {
           return productsProvider.fetchProducts(
             page: productsProvider.nextPage,
-            pageSize: paginationData.pageSize,
+            pageSize: productsProvider.paginationData.pageSize,
           );
         }
       }
@@ -69,7 +80,9 @@ class _HomeBodyState extends State<HomeBody> {
           return Padding(
             padding: const EdgeInsets.all(10.0),
             child: Product(
+              id: products[index].id,
               mediaUrl: products[index].mediaUrl,
+              productImages: products[index].productImages,
               views: products[index].views,
               likes: products[index].likes,
               price: products[index].price,

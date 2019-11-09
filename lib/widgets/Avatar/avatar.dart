@@ -16,7 +16,7 @@ class Avatar extends StatelessWidget {
       child: ClipRRect(
         child: CustomImage(imageUrl: avatarUrl),
         borderRadius: BorderRadius.all(
-          Radius.circular(20.0),
+          Radius.circular(200.0),
         ),
       ),
     );

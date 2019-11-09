@@ -4,4 +4,5 @@ class Api {
   static String loginUrl = '$baseUrl/auth/login';
   static String signupUrl = '$baseUrl/auth';
   static String productsUrl = '$baseUrl/product';
+  static String categoriesUrl = '$baseUrl/category';
 }

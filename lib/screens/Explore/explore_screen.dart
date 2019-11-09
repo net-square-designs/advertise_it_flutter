@@ -38,7 +38,6 @@ class ExploreScreen extends StatelessWidget {
     return Scaffold(
       appBar: topNavigation(
           title: Center(
-            
             child: CustomText(
               'Explore',
               styleName: StyleName.title,
