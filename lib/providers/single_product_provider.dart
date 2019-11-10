@@ -116,7 +116,7 @@ class SingleProductsProvider extends ChangeNotifier {
       print(stack);
       stopFetching();
 
-      if (e.response.data != null) {
+      if (e.response != null) {
         return setErrors(e.response.data['message']);
       }
 
