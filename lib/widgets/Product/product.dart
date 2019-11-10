@@ -42,7 +42,9 @@ class Product extends StatelessWidget {
       child: ClipRRect(
         child: Row(
           children: <Widget>[
-            Expanded(child: cacheImage),
+            Expanded(
+              child: InkWell(child: cacheImage,),
+            ),
           ],
         ),
         borderRadius: BorderRadius.only(
