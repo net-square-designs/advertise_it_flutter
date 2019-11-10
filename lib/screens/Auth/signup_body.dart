@@ -44,7 +44,7 @@ class _SignupBodyState extends State<SignupBody> {
 
   validateFirstName(String value) {
     if (value.isEmpty) {
-      return 'Please enter your email';
+      return 'Please enter your first name';
     }
     return null;
   }

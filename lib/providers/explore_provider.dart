@@ -1,9 +1,7 @@
-import 'package:advertise_it/constants/api.dart';
 import 'package:advertise_it/models/categories.interface.dart';
+import 'package:advertise_it/services/http.service.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
 
 class ExploreProvider extends ChangeNotifier {
   List<ICategories> _categories = [];
@@ -48,15 +46,15 @@ class ExploreProvider extends ChangeNotifier {
   /// Fetch categories data from the backend
   Future<void> fetchCategories() async {
     // print('called fetchCategories');
-    String url = Api.categoriesUrl;
+    // String url = Api.categoriesUrl;
 
     setCategories([]);
 
     try {
       startFetching();
 
-      http.Response response = await http.get(url);
-      Map jsonResponse = convert.jsonDecode(response.body);
+      Response response = await httpService.get('/category');
+      Map jsonResponse = response.data;
 
       stopFetching();
 

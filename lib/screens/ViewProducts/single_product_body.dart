@@ -115,10 +115,19 @@ class SingleProductBody extends StatelessWidget {
               ),
               SizedBox(
                 child: RaisedButton(
-                  child: Text('Follow Seller'),
+                  child: Text(
+                    singleProductsProvider.isFollowing
+                        ? 'Following'
+                        : 'Follow Seller',
+                  ),
                   onPressed: () {
-                    // print(product.productOwner['userId']);
+                    singleProductsProvider.followSeller(
+                      sellerId: product.productOwner['userId'],
+                      context: context,
+                    );
                   },
+                  color:
+                      singleProductsProvider.isFollowing ? appBlack[400] : null,
                 ),
                 height: 25,
               ),
@@ -142,9 +151,14 @@ class SingleProductBody extends StatelessWidget {
                   children: <Widget>[
                     DecoratedBox(
                       decoration: BoxDecoration(
-                        // shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.white60,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black87,
+                            blurRadius: 45.0,
+                          ),
+                        ],
                       ),
                       child: ButtonBar(
                         mainAxisSize: MainAxisSize.min,
@@ -160,9 +174,15 @@ class SingleProductBody extends StatelessWidget {
                             FontAwesomeIcons.share,
                             color: appBlack[300],
                           ),
-                          Icon(
-                            Icons.favorite,
-                            color: appBlack[300],
+                          InkWell(
+                            child: Icon(
+                              Icons.favorite,
+                              color: singleProductsProvider.isLikedByUser
+                                  ? appPink
+                                  : appBlack[300],
+                            ),
+                            onTap: () => singleProductsProvider.likeProduct(
+                                productId: product.id, context: context),
                           ),
                         ],
                       ),

@@ -1,24 +1,23 @@
 import 'dart:async';
-
-import 'package:advertise_it/constants/api.dart';
 import 'package:advertise_it/models/pagination_meta.interface.dart';
 import 'package:advertise_it/models/products.interface.dart';
+import 'package:advertise_it/services/http.service.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
 
 enum OrderDirection { ASC, DESC }
 
 class ProductsProvider extends ChangeNotifier {
   /// Private provider state properties
   int _nextPage = 1;
+  int _startPage = 1;
   bool _isFetching = true;
   IPaginationMeta _paginationMeta;
 
   Map<String, String> _errors = {};
   List<IProducts> _products = [];
   int get nextPage => _nextPage;
+  int get startPage => _startPage;
 
   /// Public provider state getters
   OrderDirection get orderDirection => OrderDirection.ASC;
@@ -31,11 +30,6 @@ class ProductsProvider extends ChangeNotifier {
     // fetchProducts(page: 1, pageSize: 10);
   }
 
-  void setNextPage() {
-    _nextPage = _nextPage + 1;
-    notifyListeners();
-  }
-
   /// Public provider setters
   void setProducts(List<IProducts> productsList) {
     _products = productsList;
@@ -43,11 +37,9 @@ class ProductsProvider extends ChangeNotifier {
   }
 
   void updateProductList(IProducts product) {
-    // print('updateProductList');
     final updatedProductsList = _products.map(
       (thisProduct) {
         if (thisProduct.id == product.id) {
-          // print('product: ${product.id}: ${product.views}');
           return thisProduct = product;
         }
         return thisProduct;
@@ -70,9 +62,16 @@ class ProductsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setMetaData(Map metaData) {
+  setMetaData(Map metaData, bool isFresh) {
     _paginationMeta = IPaginationMeta.fromMap(metaData);
-    notifyListeners();
+    if (isFresh) {
+      _nextPage = _startPage + 1;
+      return notifyListeners();
+    }
+    if (_nextPage <= _paginationMeta.totalPages) {
+      _nextPage = _nextPage + 1;
+      return notifyListeners();
+    }
   }
 
   /// add more products
@@ -92,46 +91,45 @@ class ProductsProvider extends ChangeNotifier {
     @required int pageSize,
     String orderBy = 'id',
     OrderDirection orderDirection = OrderDirection.DESC,
+    bool isFresh = false,
     BuildContext context,
   }) async {
     String direction = orderDirection == OrderDirection.ASC ? 'ASC' : 'DESC';
-    String url = '${Api.productsUrl}?page=$page&pageSize=$pageSize'
+    String url = '/product?page=$page&pageSize=$pageSize'
         '&orderBy=$orderBy&direction=$direction';
 
     try {
       startFetching();
-
-      http.Response response = await http.get(url);
-      Map jsonResponse = convert.jsonDecode(response.body);
+      Response response = await httpService.get(url);
+      Map jsonResponse = response.data;
 
       if (jsonResponse['success']) {
         List fetchedProducts = jsonResponse['data']['products'];
         Map metaData = jsonResponse['data']['metaData'];
 
-        // print('fetchedProducts: ${fetchedProducts[0]['ProductImages']}');
-
-        // return;
-
-        setNextPage();
-        setMetaData(metaData);
-
         List<IProducts> productsList = fetchedProducts.map((product) {
           return IProducts.fromMap(product);
         }).toList();
 
+        setMetaData(metaData, isFresh);
+        print('isFresh: $isFresh' ': $_nextPage');
         stopFetching();
-        if (_products.length == 0) {
+        if (isFresh) {
           return setProducts(productsList);
         }
         return addProducts(productsList);
       }
 
       stopFetching();
-      return setErrors(jsonResponse['message']);
-    } catch (e, stack) {
+    } on DioError catch (e, stack) {
       print(e);
       print(stack);
       stopFetching();
+
+      if (e.response.data != null) {
+        return setErrors(e.response.data['message']);
+      }
+
       return setErrors('An error occured');
     }
   }
