@@ -112,7 +112,7 @@ class ProductsProvider extends ChangeNotifier {
         }).toList();
 
         setMetaData(metaData, isFresh);
-        print('isFresh: $isFresh' ': $_nextPage');
+        // print('isFresh: $isFresh' ': $_nextPage');
         stopFetching();
         if (isFresh) {
           return setProducts(productsList);

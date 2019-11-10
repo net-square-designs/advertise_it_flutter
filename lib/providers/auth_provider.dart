@@ -74,7 +74,7 @@ class AuthProvider extends ChangeNotifier {
       print(e);
       print(stack);
 
-      if (e.response.data != null) {
+      if (e.response != null) {
         if (e.response.data['statusCode'] == 400) {
           final String errorMsg = e.response.data['errors']['detailsObject']
                   ['email'] ??
@@ -82,6 +82,7 @@ class AuthProvider extends ChangeNotifier {
 
           return errorToaster(context, errorMsg);
         }
+        return errorToaster(context, e.response.data['message']);
       } else {
         return errorToaster(
           context,
@@ -111,7 +112,7 @@ class AuthProvider extends ChangeNotifier {
 
       successToaster(context, 'Your account was created successfully');
 
-      return Timer(Duration(seconds: 2), () {
+      return Timer(Duration(seconds: 1), () {
         setAuthUser(jsonResponse['data']['token']);
         Navigator.pushReplacementNamed(context, HomeScreen.routeName);
       });
@@ -119,7 +120,7 @@ class AuthProvider extends ChangeNotifier {
       print(e);
       print(stack);
 
-      if (e.response.data != null) {
+      if (e.response != null) {
         if (e.response.data['statusCode'] == 400) {
           print(e.response.data['errors']);
           final String errorMsg = e.response.data['errors']['detailsObject']

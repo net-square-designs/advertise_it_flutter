@@ -155,8 +155,10 @@ class SingleProductBody extends StatelessWidget {
                         color: Colors.white60,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black87,
-                            blurRadius: 45.0,
+                            color: Colors.black26,
+                            blurRadius: 8.0,
+                            offset: Offset(0, 5),
+                            spreadRadius: 1,
                           ),
                         ],
                       ),
