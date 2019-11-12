@@ -28,7 +28,7 @@ class IProducts {
       price: data['price'] ?? '0',
       productOwner: data['productOwner'] ?? data['Owner'] ?? {},
       productImages: data["ProductImages"] ?? [],
-      mediaUrl: data["ProductImages"][0]['image'] ?? '',
+      mediaUrl: data["ProductImages"].length > 0 ? data["ProductImages"][0]['image'] : '',
     );
   }
 }

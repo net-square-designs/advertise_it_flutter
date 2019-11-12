@@ -25,7 +25,6 @@ class _HomeBodyState extends State<HomeBody> {
     Future.delayed(Duration.zero, () {
       final ProductsProvider productsProvider =
           Provider.of<ProductsProvider>(context);
-      print(productsProvider.startPage);
 
       productsProvider.fetchProducts(page: productsProvider.startPage, pageSize: 10, isFresh: true);
     });

@@ -48,7 +48,6 @@ class _ViewSingleProductState extends State<ViewSingleProduct> {
       appBar: topNavigation(
         leading: RawMaterialButton(
           onPressed: () {
-            print(singleProductsProvider.product);
             Navigator.pop(context, singleProductsProvider.product);
           },
           child: Icon(FontAwesomeIcons.angleLeft),

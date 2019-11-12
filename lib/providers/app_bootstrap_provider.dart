@@ -9,6 +9,7 @@ enum bootstrap {
 class AppBootstrapProvider extends ChangeNotifier {
   bool _isLoading = true;
   bool _hasSeenIntro = false;
+  double version = 0.5;
 
   AppBootstrapProvider() {
     bootstrapApp();
