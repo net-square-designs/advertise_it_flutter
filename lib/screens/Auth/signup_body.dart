@@ -2,6 +2,7 @@ import 'package:advertise_it/providers/auth_provider.dart';
 import 'package:advertise_it/screens/Auth/login_screen.dart';
 import 'package:advertise_it/themes/colors.dart';
 import 'package:advertise_it/widgets/CustomText/custom_text.dart';
+import 'package:advertise_it/widgets/Loaders/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,14 @@ class _SignupBodyState extends State<SignupBody> {
   final Color textFieldColor = Color.fromRGBO(0, 0, 0, 0.2);
 
   final _formKey = GlobalKey<FormState>(debugLabel: 'signupForm');
+
+  bool _obscureText = true;
+
+  void _toggleObscure() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   handleSignup(context) {
     final AuthProvider authProvider = Provider.of<AuthProvider>(context);
@@ -53,8 +62,11 @@ class _SignupBodyState extends State<SignupBody> {
     if (value.isEmpty) {
       return 'Please enter your phone';
     }
-    if (value.length != 11) {
+    if (value.length < 11) {
       return 'phone number should be at least 11 digits';
+    }
+    if (value.length > 11) {
+      return 'phone number should be longer than 11 digits';
     }
     return null;
   }
@@ -71,8 +83,11 @@ class _SignupBodyState extends State<SignupBody> {
 
   @override
   Widget build(BuildContext context) {
+    final AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    final bool isSubmitting = authProvider.isSubmiting;
+
     return Container(
-      padding: EdgeInsets.all(50),
+      padding: EdgeInsets.all(40),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -101,7 +116,7 @@ class _SignupBodyState extends State<SignupBody> {
                   labelStyle: TextStyle(color: appWhite[100]),
                   hintStyle: TextStyle(color: appWhite[100]),
                   errorStyle: TextStyle(color: appWhite[100]),
-                  hintText: 'Enter your First Name',
+                  hintText: 'Full Name',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none,
@@ -122,7 +137,7 @@ class _SignupBodyState extends State<SignupBody> {
                   labelStyle: TextStyle(color: appWhite[100]),
                   hintStyle: TextStyle(color: appWhite[100]),
                   errorStyle: TextStyle(color: appWhite[100]),
-                  hintText: 'Enter your Phone Number',
+                  hintText: 'Phone Number',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none,
@@ -142,7 +157,7 @@ class _SignupBodyState extends State<SignupBody> {
                   labelStyle: TextStyle(color: appWhite[100]),
                   hintStyle: TextStyle(color: appWhite[100]),
                   errorStyle: TextStyle(color: appWhite[100]),
-                  hintText: 'Enter your Email',
+                  hintText: 'Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none,
@@ -154,7 +169,7 @@ class _SignupBodyState extends State<SignupBody> {
               SizedBox(height: 10),
               TextFormField(
                 validator: (value) => validatePassword(value),
-                obscureText: true,
+                obscureText: _obscureText,
                 controller: _passwordController,
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.next,
@@ -163,10 +178,19 @@ class _SignupBodyState extends State<SignupBody> {
                   labelStyle: TextStyle(color: appWhite[100]),
                   errorStyle: TextStyle(color: appWhite[100]),
                   hintStyle: TextStyle(color: appWhite[100]),
-                  hintText: 'Enter your password',
+                  hintText: 'Password',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none,
+                  ),
+                  // icon: const Padding(
+                  //   padding: const EdgeInsets.only(top: 15.0),
+                  //   child: const Icon(Icons.lock),
+                  // ),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () => _toggleObscure(),
+                    color: Colors.white,
                   ),
                   fillColor: textFieldColor,
                   filled: true,
@@ -178,8 +202,16 @@ class _SignupBodyState extends State<SignupBody> {
                   Expanded(
                     child: RaisedButton(
                       padding: EdgeInsets.all(15),
-                      child: CustomText('Signup', styleName: StyleName.title),
-                      onPressed: () => handleSignup(context),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CustomText('Signup', styleName: StyleName.title),
+                          SizedBox(width: 10),
+                          if (isSubmitting) circleLoader(),
+                        ],
+                      ),
+                      onPressed:
+                          isSubmitting ? null : () => handleSignup(context),
                       color: Color.fromRGBO(138, 78, 162, 0.5),
                     ),
                   ),

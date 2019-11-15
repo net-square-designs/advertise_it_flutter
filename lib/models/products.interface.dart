@@ -6,6 +6,7 @@ class IProducts {
   final int likes;
   final String price;
   final Map productOwner;
+  final bool isPublished;
   List productImages = [];
 
   IProducts({
@@ -17,6 +18,7 @@ class IProducts {
     this.price,
     this.productOwner,
     this.productImages,
+    this.isPublished,
   });
 
   factory IProducts.fromMap(Map data) {
@@ -28,7 +30,8 @@ class IProducts {
       price: data['price'] ?? '0',
       productOwner: data['productOwner'] ?? data['Owner'] ?? {},
       productImages: data["ProductImages"] ?? [],
-      mediaUrl: data["ProductImages"][0]['image'] ?? '',
+      mediaUrl: data["ProductImages"].length > 0 ? data["ProductImages"][0]['image'] : '',
+      isPublished: data['isPublished'] ?? false,
     );
   }
 }

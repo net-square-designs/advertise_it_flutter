@@ -32,7 +32,7 @@ class StartupCaller extends StatelessWidget {
     return StatefulWrapper(
       onInit: () {
         _getThingsOnStartup().then((value) {
-          print('Async done');
+          // print('Async done');
         });
       },
       child: Container(),

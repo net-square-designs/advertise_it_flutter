@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:advertise_it/constants/api.dart';
 import 'package:advertise_it/models/user.interface.dart';
 import 'package:advertise_it/screens/Home/home_screen.dart';
 import 'package:advertise_it/services/http.service.dart';
@@ -15,12 +13,25 @@ class AuthProvider extends ChangeNotifier {
   String _authToken;
   IUser _authUser;
 
+  bool _isSubmiting = false;
+  bool get isSubmiting => _isSubmiting;
+
   AuthProvider() {
     initTokens();
   }
 
   String get authToken => _authToken;
   IUser get user => _authUser;
+
+  void startSubmitting() {
+    _isSubmiting = true;
+    notifyListeners();
+  }
+
+  void stopSubmitting() {
+    _isSubmiting = false;
+    notifyListeners();
+  }
 
   void setAuthToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -57,10 +68,12 @@ class AuthProvider extends ChangeNotifier {
     context,
   }) async {
     try {
+      startSubmitting();
       Response response = await httpService
-          .post(Api.loginUrl, data: {'email': email, 'password': password});
+          .post('auth/login', data: {'email': email, 'password': password});
 
       Map jsonResponse = response.data;
+      stopSubmitting();
 
       if (jsonResponse['statusCode'] == 200) {
         successToaster(context, 'You logged in successfully');
@@ -73,6 +86,7 @@ class AuthProvider extends ChangeNotifier {
     } on DioError catch (e, stack) {
       print(e);
       print(stack);
+      stopSubmitting();
 
       if (e.response != null) {
         if (e.response.data['statusCode'] == 400) {
@@ -100,7 +114,8 @@ class AuthProvider extends ChangeNotifier {
     context,
   }) async {
     try {
-      Response response = await httpService.post(Api.signupUrl, data: {
+      startSubmitting();
+      Response response = await httpService.post('/auth', data: {
         'email': email,
         'password': password,
         'firstName': firstName,
@@ -111,6 +126,7 @@ class AuthProvider extends ChangeNotifier {
       Map jsonResponse = response.data;
 
       successToaster(context, 'Your account was created successfully');
+      stopSubmitting();
 
       return Timer(Duration(seconds: 1), () {
         setAuthUser(jsonResponse['data']['token']);
@@ -119,10 +135,10 @@ class AuthProvider extends ChangeNotifier {
     } on DioError catch (e, stack) {
       print(e);
       print(stack);
+      stopSubmitting();
 
       if (e.response != null) {
         if (e.response.data['statusCode'] == 400) {
-          print(e.response.data['errors']);
           final String errorMsg = e.response.data['errors']['detailsObject']
                   ['firstName'] ??
               e.response.data['errors']['detailsObject']['email'] ??

@@ -3,7 +3,7 @@ import 'package:advertise_it/widgets/CustomText/custom_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-List<Widget> overviewSection() {
+List<Widget> overviewSection({sold = 10, purchased = 10, wished = 10}) {
   return [
     Padding(
       padding: const EdgeInsets.all(8.0),
@@ -14,9 +14,9 @@ List<Widget> overviewSection() {
         Expanded(
           flex: 1,
           child: OverviewCard(
-            title: 'Solid',
+            title: 'Sold',
             icon: FontAwesomeIcons.sellcast,
-            total: '235',
+            total: sold.toString(),
           ),
         ),
         Expanded(
@@ -24,7 +24,7 @@ List<Widget> overviewSection() {
           child: OverviewCard(
             title: 'Purchased',
             icon: FontAwesomeIcons.shoppingBasket,
-            total: '300',
+            total: purchased.toString(),
           ),
         ),
         Expanded(
@@ -32,7 +32,7 @@ List<Widget> overviewSection() {
           child: OverviewCard(
             title: 'Wished',
             icon: FontAwesomeIcons.solidHeart,
-            total: '300',
+            total: wished.toString(),
           ),
         ),
       ],

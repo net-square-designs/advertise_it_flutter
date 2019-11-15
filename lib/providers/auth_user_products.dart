@@ -1,10 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:advertise_it/screens/Home/home_screen.dart';
-import 'package:advertise_it/widgets/Toaster/toaster.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart';
 import 'package:advertise_it/models/pagination_meta.interface.dart';
 import 'package:advertise_it/models/products.interface.dart';
 import 'package:advertise_it/services/http.service.dart';
@@ -13,7 +7,7 @@ import 'package:flutter/material.dart';
 
 enum OrderDirection { ASC, DESC }
 
-class ProductsProvider extends ChangeNotifier {
+class AuthUserProductsProvider extends ChangeNotifier {
   /// Private provider state properties
   int _nextPage = 1;
   int _startPage = 1;
@@ -35,8 +29,8 @@ class ProductsProvider extends ChangeNotifier {
   IPaginationMeta get paginationData => _paginationMeta;
   List<IProducts> get products => _products;
 
-  ProductsProvider() {
-    // fetchProducts(page: 1, pageSize: 10);
+  AuthUserProductsProvider() {
+    fetchMyProducts(page: 1, pageSize: 20, isFresh: true);
   }
 
   /// Public provider setters
@@ -63,16 +57,6 @@ class ProductsProvider extends ChangeNotifier {
 
   void startFetching() {
     _isFetching = true;
-    notifyListeners();
-  }
-
-  void startSubmitting() {
-    _isSubmiting = true;
-    notifyListeners();
-  }
-
-  void stopSubmitting() {
-    _isSubmiting = false;
     notifyListeners();
   }
 
@@ -104,8 +88,8 @@ class ProductsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Fetch products data from the backend
-  Future<dynamic> fetchProducts({
+  /// Fetch the auth user products data from the backend
+  Future<dynamic> fetchMyProducts({
     @required int page,
     @required int pageSize,
     String orderBy = 'id',
@@ -114,7 +98,7 @@ class ProductsProvider extends ChangeNotifier {
     BuildContext context,
   }) async {
     String direction = orderDirection == OrderDirection.ASC ? 'ASC' : 'DESC';
-    String url = '/product?page=$page&pageSize=$pageSize'
+    String url = '/product/me?page=$page&pageSize=$pageSize'
         '&orderBy=$orderBy&direction=$direction';
 
     try {
@@ -125,6 +109,8 @@ class ProductsProvider extends ChangeNotifier {
       if (jsonResponse['success']) {
         List fetchedProducts = jsonResponse['data']['products'];
         Map metaData = jsonResponse['data']['metaData'];
+
+        print(fetchedProducts);
 
         List<IProducts> productsList = fetchedProducts.map((product) {
           return IProducts.fromMap(product);
@@ -149,64 +135,6 @@ class ProductsProvider extends ChangeNotifier {
       }
 
       return setErrors('An error occured');
-    }
-  }
-
-  /// Fetch products data from the backend
-  Future<dynamic> createProduct({
-    @required String title,
-    @required String description,
-    @required String price,
-    @required List<File> images,
-    BuildContext context,
-  }) async {
-    String url = '/product';
-
-    try {
-      startSubmitting();
-      FormData formData = new FormData.fromMap({
-        "title": title,
-        "description": description,
-        "price": price,
-        "images": images.map((image) {
-          final mimeTypeData =
-              lookupMimeType(image.path, headerBytes: [0xFF, 0xD8]).split('/');
-
-          return MultipartFile.fromFileSync(
-            image.path,
-            filename: basename(image.path),
-            contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
-          );
-        }).toList(),
-      });
-
-      Response response = await httpService.post(url, data: formData);
-      Map jsonResponse = response.data;
-
-      stopSubmitting();
-
-      if (jsonResponse['success']) {
-        // Map createdProduct = jsonResponse['data'];
-
-        successToaster(
-          context,
-          'Your new product has been successfully created',
-        );
-
-        Future.delayed(
-          Duration(seconds: 1),
-          () => Navigator.pushNamed(context, HomeScreen.routeName),
-        );
-      }
-    } on DioError catch (e) {
-      stopSubmitting();
-      print(e.response);
-      if (e.response != null) {
-        return errorToaster(
-            context, e.response.data['errors']['detailsArray'][0]['message']);
-      }
-
-      return errorToaster(context, 'An error occured');
     }
   }
 }

@@ -25,9 +25,9 @@ class _HomeBodyState extends State<HomeBody> {
     Future.delayed(Duration.zero, () {
       final ProductsProvider productsProvider =
           Provider.of<ProductsProvider>(context);
-      print(productsProvider.startPage);
 
-      productsProvider.fetchProducts(page: productsProvider.startPage, pageSize: 10, isFresh: true);
+      productsProvider.fetchProducts(
+          page: productsProvider.startPage, pageSize: 10, isFresh: true);
     });
   }
 
@@ -37,7 +37,6 @@ class _HomeBodyState extends State<HomeBody> {
         Provider.of<ProductsProvider>(context);
     final products = productsProvider.products;
 
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -45,10 +44,9 @@ class _HomeBodyState extends State<HomeBody> {
           return null;
         }
 
-    print(
-      '${productsProvider.nextPage}' '   :::  '
-      '${productsProvider.paginationData?.totalPages}'
-    );
+        print('${productsProvider.nextPage}'
+            '   :::  '
+            '${productsProvider.paginationData?.totalPages}');
         if (productsProvider.nextPage <=
             productsProvider.paginationData.totalPages) {
           return productsProvider.fetchProducts(
