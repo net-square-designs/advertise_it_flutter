@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:advertise_it/constants/api.dart';
 import 'package:advertise_it/models/user.interface.dart';
 import 'package:advertise_it/screens/Home/home_screen.dart';
 import 'package:advertise_it/services/http.service.dart';
@@ -72,7 +70,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       startSubmitting();
       Response response = await httpService
-          .post(Api.loginUrl, data: {'email': email, 'password': password});
+          .post('auth/login', data: {'email': email, 'password': password});
 
       Map jsonResponse = response.data;
       stopSubmitting();
@@ -117,7 +115,7 @@ class AuthProvider extends ChangeNotifier {
   }) async {
     try {
       startSubmitting();
-      Response response = await httpService.post(Api.signupUrl, data: {
+      Response response = await httpService.post('/auth', data: {
         'email': email,
         'password': password,
         'firstName': firstName,

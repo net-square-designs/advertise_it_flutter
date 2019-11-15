@@ -39,7 +39,7 @@ class _AddProductBodyState extends State<AddProductBody> {
     File selected = await ImagePicker.pickImage(source: source);
     const kb = 1000;
     const mb = 1000 * kb;
-    const max = 2;
+    const max = 3;
     const maxImageSize = max * mb;
 
     if (selected != null) {
@@ -325,7 +325,7 @@ class _AddProductBodyState extends State<AddProductBody> {
     List<File> files = images.values.where((item) => item != null).toList();
 
     if (files.length > 0) {
-      print(files[0].lengthSync());
+      print(files);
     }
 
     return GestureDetector(

@@ -56,11 +56,11 @@ class MyApp extends StatelessWidget {
           ExploreScreen.routeName: (context) => ExploreScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           AddProductScreen.routeName: (context) => AddProductScreen(),
-          ActivityScreen.routeName: (context) => ActivityScreen(),
           ProfileScreen.routeName: (context) => ProfileScreen(),
           SettingsScreen.routeName: (context) => SettingsScreen(),
           LoginScreen.routeName: (context) => LoginScreen(),
           SignupScreen.routeName: (context) => SignupScreen(),
+          ActivityScreen.routeName: (context) => ActivityScreen(),
           ViewSingleProduct.routeName: (context) => ChangeNotifierProvider(
             builder: (_) => SingleProductsProvider(),
             child: ViewSingleProduct(),

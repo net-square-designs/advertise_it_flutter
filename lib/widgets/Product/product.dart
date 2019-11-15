@@ -1,3 +1,4 @@
+import 'package:advertise_it/mocks/default_mock.dart';
 import 'package:advertise_it/models/products.interface.dart';
 import 'package:advertise_it/providers/products_provider.dart';
 import 'package:advertise_it/screens/ViewProducts/single_product.dart';
@@ -81,7 +82,7 @@ class Product extends StatelessWidget {
             ),
           ),
           Avatar(
-            avatarUrl: avatarUrl,
+            avatarUrl: avatarUrl ?? DefaultMock.userAvatar,
             size: 20,
           )
         ],
